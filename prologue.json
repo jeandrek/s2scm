@@ -1,0 +1,123 @@
+{
+	"objName": "Stage",
+	"variables": [{
+			"name": "result",
+			"value": 0,
+			"isPersistent": false
+		},
+		{
+			"name": "tospace",
+			"value": 0,
+			"isPersistent": false
+		},
+		{
+			"name": "free",
+			"value": 0,
+			"isPersistent": false
+		},
+		{
+			"name": "env",
+			"value": 0,
+			"isPersistent": false
+		},
+		{
+			"name": "frame",
+			"value": 0,
+			"isPersistent": false
+		},
+		{
+			"name": "argv",
+			"value": 0,
+			"isPersistent": false
+		},
+		{
+			"name": "pc",
+			"value": 0,
+			"isPersistent": false
+		},
+		{
+			"name": "continue",
+			"value": 0,
+			"isPersistent": false
+		},
+		{
+			"name": "proc",
+			"value": 0,
+			"isPersistent": false
+		},
+		{
+			"name": "length",
+			"value": 0,
+			"isPersistent": false
+		},
+		{
+			"name": "list",
+			"value": 0,
+			"isPersistent": false
+		},
+		{
+			"name": "i",
+			"value": 0,
+			"isPersistent": false
+		},
+		{
+			"name": "scan",
+			"value": 0,
+			"isPersistent": false
+		}],
+	"lists": [{
+			"listName": "heap",
+			"contents": [],
+			"isPersistent": false,
+			"x": 5,
+			"y": 5,
+			"width": 100,
+			"height": 180,
+			"visible": false
+		},
+		{
+			"listName": "stack",
+			"contents": [],
+			"isPersistent": false,
+			"x": 110,
+			"y": 5,
+			"width": 100,
+			"height": 180,
+			"visible": false
+		}],
+	"sounds": [{
+			"soundName": "pop",
+			"soundID": 1,
+			"md5": "83a9787d4cb6f3b7632b4ddfebf74367.wav",
+			"sampleCount": 258,
+			"rate": 11025,
+			"format": ""
+		}],
+	"costumes": [{
+			"costumeName": "backdrop1",
+			"baseLayerID": 2,
+			"baseLayerMD5": "739b5e2a2435f6e1ec2993791b423146.png",
+			"bitmapResolution": 1,
+			"rotationCenterX": 240,
+			"rotationCenterY": 180
+		}],
+	"currentCostumeIndex": 0,
+	"penLayerMD5": "5c81a336fab8be57adc039a8a2b33ca9.png",
+	"penLayerID": 0,
+	"tempoBPM": 60,
+	"videoAlpha": 0.5,
+	"children": [{
+			"objName": "Sprite1",
+			"scripts": [[102,
+					10,
+					[["whenGreenFlag"],
+						["deleteLine:ofList:", "all", "heap"],
+						["doRepeat", 4800, [["append:toList:", "", "heap"]]],
+						["deleteLine:ofList:", "all", "stack"],
+						["setVar:to:", "tospace", "1"],
+						["setVar:to:", "free", "1"],
+						["setVar:to:", "env", "-2"],
+						["setVar:to:", "frame", "-2"],
+						["setVar:to:", "argv", "-2"],
+						["setVar:to:", "proc", "-2"],
+						["setVar:to:", "pc", "1"]

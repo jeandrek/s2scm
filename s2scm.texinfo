@@ -1,0 +1,228 @@
+\input texinfo
+@setfilename s2scm.info
+@settitle S2scm
+@setchapternewpage off
+@syncodeindex fn cp
+@syncodeindex vr cp
+
+@copying
+Copyright @copyright{} 2019 Jeandre Kruger.
+
+This work is licensed under the Creative Commons Attribution-ShareAlike
+4.0 International License.  To view a copy of this license, visit
+@uref{http://creativecommons.org/licenses/by-sa/4.0/} or send a letter
+to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+@end copying
+
+@titlepage
+@title S2scm
+@subtitle An incomplete Scheme system for Scratch from the Lifelong Kindergarten.
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+
+@ifnottex
+@node Top
+@top S2scm
+
+An incomplete Scheme system for Scratch from the Lifelong
+Kindergarten.
+
+@insertcopying
+@end ifnottex
+
+@menu
+* Intro::                       Introduction.
+* Invoking s2scm::              Invoking the s2scm compiler.
+* Input and output::            How a Scheme program can communicate
+                                with the Scratch user.
+* Graphics and sound::          Using Scratch sprites.
+* Index::
+@end menu
+
+@node Intro
+@chapter Introduction
+
+@cindex Scratch
+S2scm is an incomplete Scheme system for Scratch 2.  I don't intend to
+complete it.  Scratch is a project of the Scratch Foundation, in
+collaboration with the Lifelong Kindergarten group at the MIT Media
+Lab.  It is available for free at @uref{https://scratch.mit.edu}.
+S2scm consists of a Scheme compiler which outputs a file
+@file{project.json} to be inserted into a Scratch project.  It isn't
+an interactive system.  It aims to comply with the
+@cite{Revised@math{^4} Report on the Algorithmic Language Scheme}.
+
+@cindex SICP
+Much of s2scm compiler is a derivative of
+@uref{https://mitpress.mit.edu/sites/default/files/sicp/index.html,@cite{Structure
+and Interpretation of Computer Programs}} by Abelson, Sussman, and
+Sussman, which is under the Creative Commons Attribution-ShareAlike
+4.0 International License.  S2scm is free software and under the same
+license.  To view a copy of this license, visit
+@uref{http://creativecommons.org/licenses/by-sa/4.0/} or send a letter
+to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+Thanks to bobbybee, for suggesting to compile to a binary tree, and
+joefarebrother, who was very helpful too.
+
+The following required R5RS features aren't yet included: quoted
+lists, @code{quasiquote}, @code{case}, @code{char->integer},
+@code{integer->char}, @code{char-upcase}, @code{char-downcase},
+strings, vectors, input and output, multiple return values, variadic
+@code{apply}, @code{dynamic-wind}, macros, and @code{eval}.
+Non-integers aren't yet supported either.
+
+@node Invoking s2scm
+@chapter Invoking the s2scm compiler
+
+@cindex Scheme implementations
+The compiler itself should be usable under any IEEE Scheme
+implementation.
+@uref{https://www.gnu.org/software/mit-scheme/,MIT/GNU Scheme} or
+@uref{https://people.csail.mit.edu/jaffer/SCM.html,SCM} is
+recommended; these are both free software.
+
+@cindex loading s2scm
+@cindex compilation
+@findex compile-files
+@findex interactive-compile-loop
+First you must load the Scheme source file @file{compile.scm}; this is
+usually done with the procedure @code{load}.  The compiler can be
+invoked with the procedure @code{compile-files}, which should be
+passed the output filename, @file{project.json}, followed by the
+filename of each Scheme source file to be compiled.  Alternatively you
+may use @code{interactive-compile-loop}, which should be passed only
+the output filename, and enter a Scheme expression to compile it
+immediately.
+
+@node Input and output
+@chapter Input and output
+
+@vindex result
+The only output of a compiled Scheme program is the value of the final
+expression evaluated; this is stored in the variable @code{result}.
+
+Procedures for reading and writing don't yet exist.  The former would
+read from an @code{ask and wait} box and the latter would write to a
+list.
+
+@node Graphics and sound
+@chapter Graphics and sound
+
+If procedures for these did exist, they would look something like
+this:
+
+@deffn Procedure clone
+@deffnx Procedure clone sprite
+
+Returns a new clone of @var{sprite} or the default sprite if omitted.
+@end deffn
+
+@deffn Procedure say text
+@deffnx Procedure think text
+@deffnx Procedure say text sprite
+@deffnx Procedure think text sprite
+
+Makes @var{sprite}, or the default sprite if omitted, say or think
+@var{text} respectively.
+@end deffn
+
+@deffn Procedure show
+@deffnx Procedure hide
+@deffnx Procedure show sprite
+@deffnx Procedure hide sprite
+Respectively, shows or hides @var{sprite} or the default sprite if
+omitted.
+@end deffn
+
+@deffn Procedure forward distance
+@deffnx Procedure forward distance sprite
+Moves @var{sprite}, or the default sprite if omitted, @var{distance}
+steps forward.
+@end deffn
+
+@deffn Procedure left angle
+@deffnx Procedure right angle
+@deffnx Procedure left angle sprite
+@deffnx Procedure right angle sprite
+Turns @var{sprite}, or the default sprite if ommited, @var{angle}
+degrees left or right respectively.
+@end deffn
+
+@deffn Procedure x-position
+@deffnx Procedure y-position
+@deffnx Procedure x-position sprite
+@deffnx Procedure y-position sprite
+Returns the coordinates of @var{sprite} or the default sprite if
+ommited.
+@end deffn
+
+@deffn Procedure set-pos x y
+@deffnx Procedure set-pos x y sprite
+Sets the position of @var{sprite} or the default sprite if ommited.
+@end deffn
+
+@deffn Procedure direction
+@deffnx Procedure direction sprite
+Returns the number of degrees the direction of @var{sprite}, or the
+default sprite if ommited, is clockwise from north.
+@end deffn
+
+@deffn Procedure set-direction direction
+@deffnx Procedure set-direction direction sprite
+Sets the direction of @var{sprite}, or the default sprite if ommited,
+to @var{direction} degrees clockwise of north.
+@end deffn
+
+@deffn Procedure clear
+Removes all pen marks from the stage.
+@end deffn
+
+@deffn Procedure pen-up
+@deffnx Procedure pen-down
+@deffnx Procedure pen-up sprite
+@deffnx Procedure pen-down sprite
+Respectively, raises or lowers the pen of @var{sprite} or the default
+sprite if ommited.
+@end deffn
+
+@deffn Procedure set-pen-color color
+@deffnx Procedure set-pen-color color sprite
+Sets the pen color of @var{sprite}, or the default sprite if omitted,
+to that represented by the 32-bit ARGB value @var{color}.
+@end deffn
+
+@deffn Procedure set-pen-hue hue
+@deffnx Procedure set-pen-hue hue sprite
+Sets the hue of the pen color of @var{sprite}, or the default sprite
+if ommited, to that represented by @var{hue}, which is a real and has
+a period of 200.
+@end deffn
+
+@deffn Procedure set-pen-shade shade
+@deffnx Procedure set-pen-shade shade sprite
+Sets the shade of the pen color of @var{sprite}, or the default sprite
+if omitted, to that represented by @var{shade}, which should be
+between 0 and 100.
+@end deffn
+
+@deffn Procedure set-pen-size size
+@deffnx Procedure set-pen-size size sprite
+Sets the diameter of the pen of @var{sprite}, or the default sprite if
+omitted, to @var{size}.
+@end deffn
+
+@deffn Procedure mouse-x
+@deffnx Procedure mouse-y
+Returns the stage coordinates of the mouse pointer.
+@end deffn
+
+@node Index
+@unnumbered Index
+
+@printindex cp
+
+@bye

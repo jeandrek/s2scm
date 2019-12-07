@@ -1,0 +1,332 @@
+<html lang="en">
+<head>
+<title>S2scm</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="S2scm">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+Copyright (C) 2019 Jeandre Kruger.
+
+This work is licensed under the Creative Commons Attribution-ShareAlike
+4.0 International License.  To view a copy of this license, visit
+`http://creativecommons.org/licenses/by-sa/4.0/' or send a letter
+to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<h1 class="settitle">S2scm</h1>
+<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="#Top">S2scm</a>
+<li><a name="toc_Intro" href="#Intro">1 Introduction</a>
+<li><a name="toc_Invoking-s2scm" href="#Invoking-s2scm">2 Invoking the s2scm compiler</a>
+<li><a name="toc_Input-and-output" href="#Input-and-output">3 Input and output</a>
+<li><a name="toc_Graphics-and-sound" href="#Graphics-and-sound">4 Graphics and sound</a>
+<li><a name="toc_Index" href="#Index">Index</a>
+</li></ul>
+</div>
+
+
+
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Intro">Intro</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">S2scm</h2>
+
+<p>An incomplete Scheme system for Scratch from the Lifelong
+Kindergarten.
+
+   <p>Copyright &copy; 2019 Jeandre Kruger.
+
+   <p>This work is licensed under the Creative Commons Attribution-ShareAlike
+4.0 International License.  To view a copy of this license, visit
+<a href="http://creativecommons.org/licenses/by-sa/4.0/">http://creativecommons.org/licenses/by-sa/4.0/</a> or send a letter
+to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+
+<ul class="menu">
+<li><a accesskey="1" href="#Intro">Intro</a>:                        Introduction. 
+<li><a accesskey="2" href="#Invoking-s2scm">Invoking s2scm</a>:               Invoking the s2scm compiler. 
+<li><a accesskey="3" href="#Input-and-output">Input and output</a>:             How a Scheme program can communicate
+                                with the Scratch user. 
+<li><a accesskey="4" href="#Graphics-and-sound">Graphics and sound</a>:           Using Scratch sprites. 
+<li><a accesskey="5" href="#Index">Index</a>
+</ul>
+
+<div class="node">
+<a name="Intro"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Invoking-s2scm">Invoking s2scm</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">1 Introduction</h2>
+
+<p><a name="index-Scratch-1"></a>S2scm is an incomplete Scheme system for Scratch 2.  I don't intend to
+complete it.  Scratch is a project of the Scratch Foundation, in
+collaboration with the Lifelong Kindergarten group at the MIT Media
+Lab.  It is available for free at <a href="https://scratch.mit.edu">https://scratch.mit.edu</a>. 
+S2scm consists of a Scheme compiler which outputs a file
+<samp><span class="file">project.json</span></samp> to be inserted into a Scratch project.  It isn't
+an interactive system.  It aims to comply with the
+<cite>Revised^4 Report on the Algorithmic Language Scheme</cite>.
+
+   <p><a name="index-SICP-2"></a>Much of s2scm compiler is a derivative of
+<a href="https://mitpress.mit.edu/sites/default/files/sicp/index.html"><cite>Structure and Interpretation of Computer Programs</cite></a> by Abelson, Sussman, and
+Sussman, which is under the Creative Commons Attribution-ShareAlike
+4.0 International License.  S2scm is free software and under the same
+license.  To view a copy of this license, visit
+<a href="http://creativecommons.org/licenses/by-sa/4.0/">http://creativecommons.org/licenses/by-sa/4.0/</a> or send a letter
+to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA. 
+Thanks to bobbybee, for suggesting to compile to a binary tree, and
+joefarebrother, who was very helpful too.
+
+   <p>The following required R5RS features aren't yet included: quoted
+lists, <code>quasiquote</code>, <code>case</code>, <code>char-&gt;integer</code>,
+<code>integer-&gt;char</code>, <code>char-upcase</code>, <code>char-downcase</code>,
+strings, vectors, input and output, multiple return values, variadic
+<code>apply</code>, <code>dynamic-wind</code>, macros, and <code>eval</code>. 
+Non-integers aren't yet supported either.
+
+<div class="node">
+<a name="Invoking-s2scm"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Input-and-output">Input and output</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Intro">Intro</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">2 Invoking the s2scm compiler</h2>
+
+<p><a name="index-Scheme-implementations-3"></a>The compiler itself should be usable under any IEEE Scheme
+implementation. 
+<a href="https://www.gnu.org/software/mit-scheme/">MIT/GNU Scheme</a> or
+<a href="https://people.csail.mit.edu/jaffer/SCM.html">SCM</a> is
+recommended; these are both free software.
+
+   <p><a name="index-loading-s2scm-4"></a><a name="index-compilation-5"></a><a name="index-compile_002dfiles-6"></a><a name="index-interactive_002dcompile_002dloop-7"></a>First you must load the Scheme source file <samp><span class="file">compile.scm</span></samp>; this is
+usually done with the procedure <code>load</code>.  The compiler can be
+invoked with the procedure <code>compile-files</code>, which should be
+passed the output filename, <samp><span class="file">project.json</span></samp>, followed by the
+filename of each Scheme source file to be compiled.  Alternatively you
+may use <code>interactive-compile-loop</code>, which should be passed only
+the output filename, and enter a Scheme expression to compile it
+immediately.
+
+<div class="node">
+<a name="Input-and-output"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Graphics-and-sound">Graphics and sound</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Invoking-s2scm">Invoking s2scm</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">3 Input and output</h2>
+
+<p><a name="index-result-8"></a>The only output of a compiled Scheme program is the value of the final
+expression evaluated; this is stored in the variable <code>result</code>.
+
+   <p>Procedures for reading and writing don't yet exist.  The former would
+read from an <code>ask and wait</code> box and the latter would write to a
+list.
+
+<div class="node">
+<a name="Graphics-and-sound"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Index">Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Input-and-output">Input and output</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="chapter">4 Graphics and sound</h2>
+
+<p>If procedures for these did exist, they would look something like
+this:
+
+<div class="defun">
+&mdash; Procedure: <b>clone</b><var><a name="index-clone-9"></a></var><br>
+&mdash; Procedure: <b>clone</b><var> sprite<a name="index-clone-10"></a></var><br>
+<blockquote>
+        <p>Returns a new clone of <var>sprite</var> or the default sprite if omitted. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>say</b><var> text<a name="index-say-11"></a></var><br>
+&mdash; Procedure: <b>think</b><var> text<a name="index-think-12"></a></var><br>
+&mdash; Procedure: <b>say</b><var> text sprite<a name="index-say-13"></a></var><br>
+&mdash; Procedure: <b>think</b><var> text sprite<a name="index-think-14"></a></var><br>
+<blockquote>
+        <p>Makes <var>sprite</var>, or the default sprite if omitted, say or think
+<var>text</var> respectively. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>show</b><var><a name="index-show-15"></a></var><br>
+&mdash; Procedure: <b>hide</b><var><a name="index-hide-16"></a></var><br>
+&mdash; Procedure: <b>show</b><var> sprite<a name="index-show-17"></a></var><br>
+&mdash; Procedure: <b>hide</b><var> sprite<a name="index-hide-18"></a></var><br>
+<blockquote><p>Respectively, shows or hides <var>sprite</var> or the default sprite if
+omitted. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>forward</b><var> distance<a name="index-forward-19"></a></var><br>
+&mdash; Procedure: <b>forward</b><var> distance sprite<a name="index-forward-20"></a></var><br>
+<blockquote><p>Moves <var>sprite</var>, or the default sprite if omitted, <var>distance</var>
+steps forward. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>left</b><var> angle<a name="index-left-21"></a></var><br>
+&mdash; Procedure: <b>right</b><var> angle<a name="index-right-22"></a></var><br>
+&mdash; Procedure: <b>left</b><var> angle sprite<a name="index-left-23"></a></var><br>
+&mdash; Procedure: <b>right</b><var> angle sprite<a name="index-right-24"></a></var><br>
+<blockquote><p>Turns <var>sprite</var>, or the default sprite if ommited, <var>angle</var>
+degrees left or right respectively. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>x-position</b><var><a name="index-x_002dposition-25"></a></var><br>
+&mdash; Procedure: <b>y-position</b><var><a name="index-y_002dposition-26"></a></var><br>
+&mdash; Procedure: <b>x-position</b><var> sprite<a name="index-x_002dposition-27"></a></var><br>
+&mdash; Procedure: <b>y-position</b><var> sprite<a name="index-y_002dposition-28"></a></var><br>
+<blockquote><p>Returns the coordinates of <var>sprite</var> or the default sprite if
+ommited. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>set-pos</b><var> x y<a name="index-set_002dpos-29"></a></var><br>
+&mdash; Procedure: <b>set-pos</b><var> x y sprite<a name="index-set_002dpos-30"></a></var><br>
+<blockquote><p>Sets the position of <var>sprite</var> or the default sprite if ommited. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>direction</b><var><a name="index-direction-31"></a></var><br>
+&mdash; Procedure: <b>direction</b><var> sprite<a name="index-direction-32"></a></var><br>
+<blockquote><p>Returns the number of degrees the direction of <var>sprite</var>, or the
+default sprite if ommited, is clockwise from north. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>set-direction</b><var> direction<a name="index-set_002ddirection-33"></a></var><br>
+&mdash; Procedure: <b>set-direction</b><var> direction sprite<a name="index-set_002ddirection-34"></a></var><br>
+<blockquote><p>Sets the direction of <var>sprite</var>, or the default sprite if ommited,
+to <var>direction</var> degrees clockwise of north. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>clear</b><var><a name="index-clear-35"></a></var><br>
+<blockquote><p>Removes all pen marks from the stage. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>pen-up</b><var><a name="index-pen_002dup-36"></a></var><br>
+&mdash; Procedure: <b>pen-down</b><var><a name="index-pen_002ddown-37"></a></var><br>
+&mdash; Procedure: <b>pen-up</b><var> sprite<a name="index-pen_002dup-38"></a></var><br>
+&mdash; Procedure: <b>pen-down</b><var> sprite<a name="index-pen_002ddown-39"></a></var><br>
+<blockquote><p>Respectively, raises or lowers the pen of <var>sprite</var> or the default
+sprite if ommited. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>set-pen-color</b><var> color<a name="index-set_002dpen_002dcolor-40"></a></var><br>
+&mdash; Procedure: <b>set-pen-color</b><var> color sprite<a name="index-set_002dpen_002dcolor-41"></a></var><br>
+<blockquote><p>Sets the pen color of <var>sprite</var>, or the default sprite if omitted,
+to that represented by the 32-bit ARGB value <var>color</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>set-pen-hue</b><var> hue<a name="index-set_002dpen_002dhue-42"></a></var><br>
+&mdash; Procedure: <b>set-pen-hue</b><var> hue sprite<a name="index-set_002dpen_002dhue-43"></a></var><br>
+<blockquote><p>Sets the hue of the pen color of <var>sprite</var>, or the default sprite
+if ommited, to that represented by <var>hue</var>, which is a real and has
+a period of 200. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>set-pen-shade</b><var> shade<a name="index-set_002dpen_002dshade-44"></a></var><br>
+&mdash; Procedure: <b>set-pen-shade</b><var> shade sprite<a name="index-set_002dpen_002dshade-45"></a></var><br>
+<blockquote><p>Sets the shade of the pen color of <var>sprite</var>, or the default sprite
+if omitted, to that represented by <var>shade</var>, which should be
+between 0 and 100. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>set-pen-size</b><var> size<a name="index-set_002dpen_002dsize-46"></a></var><br>
+&mdash; Procedure: <b>set-pen-size</b><var> size sprite<a name="index-set_002dpen_002dsize-47"></a></var><br>
+<blockquote><p>Sets the diameter of the pen of <var>sprite</var>, or the default sprite if
+omitted, to <var>size</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Procedure: <b>mouse-x</b><var><a name="index-mouse_002dx-48"></a></var><br>
+&mdash; Procedure: <b>mouse-y</b><var><a name="index-mouse_002dy-49"></a></var><br>
+<blockquote><p>Returns the stage coordinates of the mouse pointer. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Index"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Graphics-and-sound">Graphics and sound</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<h2 class="unnumbered">Index</h2>
+
+<ul class="index-cp" compact>
+<li><a href="#index-clear-35"><code>clear</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-clone-10"><code>clone</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-compilation-5">compilation</a>: <a href="#Invoking-s2scm">Invoking s2scm</a></li>
+<li><a href="#index-compile_002dfiles-6"><code>compile-files</code></a>: <a href="#Invoking-s2scm">Invoking s2scm</a></li>
+<li><a href="#index-direction-31"><code>direction</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-forward-20"><code>forward</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-hide-18"><code>hide</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-interactive_002dcompile_002dloop-7"><code>interactive-compile-loop</code></a>: <a href="#Invoking-s2scm">Invoking s2scm</a></li>
+<li><a href="#index-left-23"><code>left</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-loading-s2scm-4">loading s2scm</a>: <a href="#Invoking-s2scm">Invoking s2scm</a></li>
+<li><a href="#index-mouse_002dx-48"><code>mouse-x</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-mouse_002dy-49"><code>mouse-y</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-pen_002ddown-39"><code>pen-down</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-pen_002dup-38"><code>pen-up</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-result-8"><code>result</code></a>: <a href="#Input-and-output">Input and output</a></li>
+<li><a href="#index-right-24"><code>right</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-say-13"><code>say</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-Scheme-implementations-3">Scheme implementations</a>: <a href="#Invoking-s2scm">Invoking s2scm</a></li>
+<li><a href="#index-Scratch-1">Scratch</a>: <a href="#Intro">Intro</a></li>
+<li><a href="#index-set_002ddirection-33"><code>set-direction</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-set_002dpen_002dcolor-41"><code>set-pen-color</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-set_002dpen_002dhue-42"><code>set-pen-hue</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-set_002dpen_002dshade-45"><code>set-pen-shade</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-set_002dpen_002dsize-46"><code>set-pen-size</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-set_002dpos-29"><code>set-pos</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-show-17"><code>show</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-SICP-2">SICP</a>: <a href="#Intro">Intro</a></li>
+<li><a href="#index-think-12"><code>think</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-x_002dposition-27"><code>x-position</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+<li><a href="#index-y_002dposition-28"><code>y-position</code></a>: <a href="#Graphics-and-sound">Graphics and sound</a></li>
+   </ul></body></html>
+
